@@ -9,8 +9,8 @@ import '@/styles/theme-config.css'
 
 export const metadata: Metadata = {
   title: {
-    default: 'ChatGPT Lite',
-    template: `%s - ChatGPT Lite`
+    default: 'KidsGPT',
+    template: `%s - KidsGPT`
   },
   description: 'AI assistant powered by ChatGPT',
   icons: {

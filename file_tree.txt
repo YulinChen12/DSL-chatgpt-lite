@@ -1,0 +1,74 @@
+.
+├── Dockerfile
+├── LICENSE
+├── README.md
+├── README.zh-CN.md
+├── app
+│   ├── (site)
+│   │   └── page.tsx
+│   ├── api
+│   │   └── chat
+│   │       └── route.ts
+│   ├── chat
+│   │   ├── PersonaModal.tsx
+│   │   ├── PersonaPanel.tsx
+│   │   └── page.tsx
+│   ├── layout.tsx
+│   └── not-found.tsx
+├── components
+│   ├── Chat
+│   │   ├── Chat.tsx
+│   │   ├── ChatSideBar.tsx
+│   │   ├── Message.tsx
+│   │   ├── chatContext.ts
+│   │   ├── index.scss
+│   │   ├── index.ts
+│   │   ├── interface.ts
+│   │   └── useChatHook.ts
+│   ├── Header
+│   │   ├── Header.tsx
+│   │   └── index.ts
+│   ├── Link.tsx
+│   ├── Markdown
+│   │   ├── Markdown.tsx
+│   │   └── index.ts
+│   ├── Themes
+│   │   ├── ThemeContext.ts
+│   │   ├── ThemeProvider.tsx
+│   │   ├── ThemeScript.tsx
+│   │   ├── index.ts
+│   │   ├── interface.ts
+│   │   ├── useTheme.ts
+│   │   └── utils.ts
+│   └── index.ts
+├── docker-compose.yml
+├── docs
+│   └── images
+│       ├── demo.jpg
+│       └── demo.zh-CN.jpg
+├── eslint.config.mjs
+├── file_tree.txt
+├── hooks
+│   └── useCopyToClipboard.ts
+├── k8s
+│   ├── README.md
+│   ├── chatgpt-lite-deployment.yaml
+│   └── env-secret.yaml
+├── next-env.d.ts
+├── next.config.ts
+├── package-lock.json
+├── package.json
+├── postcss.config.mjs
+├── providers
+│   └── ThemesProvider.tsx
+├── public
+│   ├── apple-touch-icon.png
+│   ├── favicon-16x16.png
+│   └── favicon.ico
+├── styles
+│   ├── globals.scss
+│   └── theme-config.css
+├── tailwind.config.ts
+└── tsconfig.json
+
+18 directories, 54 files

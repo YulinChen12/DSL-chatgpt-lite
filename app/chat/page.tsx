@@ -1,5 +1,7 @@
 'use client'
-import { Suspense } from 'react'
+
+import { Suspense, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import { Flex } from '@radix-ui/themes'
 import { Chat, ChatContext, ChatSideBar, useChatHook } from '@/components'
 import PersonaModal from './PersonaModal'
@@ -23,6 +25,15 @@ const ChatProvider = () => {
 }
 
 const ChatPage = () => {
+  const router = useRouter()
+
+  useEffect(() => {
+    const role = localStorage.getItem('role')
+    if (!role) {
+      router.push('/login')
+    }
+  }, [])
+
   return (
     <Suspense>
       <ChatProvider />

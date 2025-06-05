@@ -15,6 +15,7 @@ export async function POST(req: NextRequest) {
       messages: Message[]
       input: string
     }
+
     const messagesWithHistory = [
       { content: prompt, role: 'system' },
       ...messages,
@@ -22,7 +23,8 @@ export async function POST(req: NextRequest) {
     ]
 
     const { apiUrl, apiKey, model } = getApiConfig()
-    const stream = await getOpenAIStream(apiUrl, apiKey, model, messagesWithHistory)
+    const stream = await getOpenAIStream(apiUrl, apiKey, model, messagesWithHistory, input)
+
     return new NextResponse(stream, {
       headers: { 'Content-Type': 'text/event-stream' }
     })
@@ -51,7 +53,7 @@ const getApiConfig = () => {
     }
     apiUrl = `${apiBaseUrl}/openai/deployments/${deployment}/chat/completions?api-version=${apiVersion}`
     apiKey = process.env.AZURE_OPENAI_API_KEY || ''
-    model = '' // Azure Open AI always ignores the model and decides based on the deployment name passed through.
+    model = ''
   } else {
     let apiBaseUrl = process.env.OPENAI_API_BASE_URL || 'https://api.openai.com'
     if (apiBaseUrl && apiBaseUrl.endsWith('/')) {
@@ -69,7 +71,8 @@ const getOpenAIStream = async (
   apiUrl: string,
   apiKey: string,
   model: string,
-  messages: Message[]
+  messages: Message[],
+  prompt: string
 ) => {
   const encoder = new TextEncoder()
   const decoder = new TextDecoder()
@@ -101,7 +104,8 @@ const getOpenAIStream = async (
     )
   }
 
-  return new ReadableStream({
+  let fullResponse = ''
+  const stream = new ReadableStream({
     async start(controller) {
       const onParse = (event: ParsedEvent | ReconnectInterval) => {
         if (event.type === 'event') {
@@ -109,6 +113,14 @@ const getOpenAIStream = async (
 
           if (data === '[DONE]') {
             controller.close()
+
+            // 👇 在收到完整回复后将其发到存储 API
+            fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/save-history`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ prompt, response: fullResponse })
+            }).catch(console.error)
+
             return
           }
 
@@ -116,10 +128,8 @@ const getOpenAIStream = async (
             const json = JSON.parse(data)
             const text = json.choices[0]?.delta?.content
             if (text !== undefined) {
-              const queue = encoder.encode(text)
-              controller.enqueue(queue)
-            } else {
-              console.error('Received undefined content:', json)
+              fullResponse += text
+              controller.enqueue(encoder.encode(text))
             }
           } catch (e) {
             console.error('Error parsing event data:', e)
@@ -131,10 +141,11 @@ const getOpenAIStream = async (
       const parser = createParser(onParse)
 
       for await (const chunk of res.body as any) {
-        // An extra newline is required to make AzureOpenAI work.
-        const str = decoder.decode(chunk).replace('[DONE]\n', '[DONE]\n\n')
+        const str = decoder.decode(chunk)
         parser.feed(str)
       }
     }
   })
+
+  return stream
 }
