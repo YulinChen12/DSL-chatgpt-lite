@@ -52,21 +52,35 @@ export default function ParentPage() {
   return (
     <div style={{ padding: '2rem' }}>
       <h1>Parent Dashboard</h1>
-      <p style={{ marginBottom: '1rem' }}>You are now viewing reports generated from your kid’s chat history.</p>
+      <p style={{ marginBottom: '1rem' }}>You are now viewing reports generated from your kid's chat history.</p>
 
-      <button
-        onClick={downloadReport}
-        style={{
-          padding: '8px 16px',
-          background: '#4caf50',
-          color: 'white',
-          border: 'none',
-          borderRadius: 4,
-          marginBottom: '1rem',
-        }}
-      >
-        📄 Download Full Chat Report
-      </button>
+      <div style={{ display: 'flex', gap: '1rem', marginBottom: '1rem' }}>
+        <button
+          onClick={downloadReport}
+          style={{
+            padding: '8px 16px',
+            background: '#4caf50',
+            color: 'white',
+            border: 'none',
+            borderRadius: 4,
+          }}
+        >
+          📄 Download Full Chat Report
+        </button>
+
+        <button
+          onClick={() => router.push('/parent/parentquiz')}
+          style={{
+            padding: '8px 16px',
+            background: '#2196f3',
+            color: 'white',
+            border: 'none',
+            borderRadius: 4,
+          }}
+        >
+          📝 Parent Quiz
+        </button>
+      </div>
 
       <div>
         {report.map((chat, i) => (
