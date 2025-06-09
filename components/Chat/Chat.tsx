@@ -256,7 +256,7 @@ const Chat = (props: ChatProps, ref: any) => {
         <div ref={bottomOfChatRef}></div>
       </ScrollArea>
       <div className="px-4 pb-3">
-        {conversation.current.length > 0 && (
+        {/* {conversation.current.length > 0 && (
           <Flex justify="start" mb="2">
             <Button
               variant="soft"
@@ -272,7 +272,7 @@ const Chat = (props: ChatProps, ref: any) => {
               Clear Chat History
             </Button>
           </Flex>
-        )}
+        )} */}
         <Flex align="end" justify="between" gap="3" className="relative">
           <div className="rt-TextAreaRoot rt-r-size-1 rt-variant-surface flex-1 rounded-3xl chat-textarea">
             <ContentEditable

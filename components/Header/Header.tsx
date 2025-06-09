@@ -6,11 +6,14 @@ import clsx from 'clsx'
 import NextLink from 'next/link'
 import { BsSun, BsMoonStars } from 'react-icons/bs'
 import { FaGithub } from 'react-icons/fa6'
+import { HiHome } from 'react-icons/hi'
+import { useRouter } from 'next/navigation'
 import { Link } from '../Link'
 import { useTheme } from '../Themes'
 
 export const Header = () => {
   const { theme, setTheme } = useTheme()
+  const router = useRouter()
 
   const handleThemeChange = useCallback(
     (nextTheme: 'dark' | 'light') => {
@@ -34,6 +37,21 @@ export const Header = () => {
           </Heading>
         </NextLink>
         <Flex align="center" gap="3" className="ml-auto">
+          <Tooltip content="Login Page" delayDuration={100}>
+            <IconButton
+              size="3"
+              variant="ghost"
+              color="gray"
+              aria-label="Go to login page"
+              onClick={() => router.push('/login')}
+              radius="full"
+              tabIndex={0}
+              className="transition-all duration-300"
+              style={{ outline: 'none' }}
+            >
+              <HiHome className="text-xl" />
+            </IconButton>
+          </Tooltip>
           <Tooltip
             content={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
             delayDuration={100}
