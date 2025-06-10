@@ -61,7 +61,7 @@ const getApiConfig = () => {
     }
     apiUrl = `${apiBaseUrl}/v1/chat/completions`
     apiKey = process.env.OPENAI_API_KEY || ''
-    model = process.env.OPENAI_MODEL || 'gpt-3.5-turbo' // 'gpt-4.1-2025-04-14'
+    model = process.env.OPENAI_MODEL || 'gpt-4o-2024-11-20' // 'gpt-4.1-2025-04-14'
   }
 
   return { apiUrl, apiKey, model }
@@ -90,7 +90,7 @@ const getOpenAIStream = async (
       messages: messages,
       presence_penalty: 0,
       stream: true,
-      temperature: 0.5,
+      temperature: 0.7,
       top_p: 0.95
     })
   })
@@ -114,7 +114,6 @@ const getOpenAIStream = async (
           if (data === '[DONE]') {
             controller.close()
 
-            // 👇 在收到完整回复后将其发到存储 API
             fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/save-history`, {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },

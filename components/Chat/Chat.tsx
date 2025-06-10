@@ -11,7 +11,7 @@ import {
 } from 'react'
 import { Flex, Heading, IconButton, ScrollArea, Tooltip, Button } from '@radix-ui/themes'
 import ContentEditable from 'react-contenteditable'
-import { AiOutlineClear, AiOutlineLoading3Quarters, AiOutlineUnorderedList } from 'react-icons/ai'
+import { AiOutlineClear, AiOutlineLoading3Quarters, AiOutlineUnorderedList, AiOutlineDownload } from 'react-icons/ai'
 import { FiSend } from 'react-icons/fi'
 import sanitizeHtml from 'sanitize-html'
 import { toast } from 'sonner'
@@ -161,6 +161,26 @@ const Chat = (props: ChatProps, ref: any) => {
     forceUpdate?.()
   }
 
+  const exportHistory = () => {
+    if (!conversation.current || conversation.current.length === 0) {
+      toast.error('No chat history to export')
+      return
+    }
+
+    let content = `=== Chat with ${currentChatRef?.current?.persona?.name || 'Unknown'} ===\n\n`
+    conversation.current.forEach((msg) => {
+      content += `${msg.role.toUpperCase()}: ${msg.content}\n\n`
+    })
+
+    const blob = new Blob([content], { type: 'text/plain;charset=utf-8' })
+    const url = URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    link.href = url
+    link.download = `chat_history_${new Date().toISOString().slice(0, 10)}.txt`
+    link.click()
+    URL.revokeObjectURL(url)
+  }
+
   useEffect(() => {
     if (textAreaRef.current) {
       textAreaRef.current.style.height = '50px'
@@ -242,6 +262,19 @@ const Chat = (props: ChatProps, ref: any) => {
             {currentChatRef?.current?.persona?.name || 'No Persona'}
           </Heading>
         </Flex>
+        {conversation.current.length > 0 && (
+          <Tooltip content="Export Chat History">
+            <IconButton
+              variant="soft"
+              color="gray"
+              size="2"
+              className="rounded-lg cursor-pointer absolute right-4 top-1/2 -translate-y-1/2"
+              onClick={exportHistory}
+            >
+              <AiOutlineDownload className="size-5" />
+            </IconButton>
+          </Tooltip>
+        )}
       </Flex>
       <ScrollArea
         className="flex-1 px-4"

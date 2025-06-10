@@ -115,7 +115,7 @@ export const Header = () => {
             size="2"
             radius="full"
             fallback={
-              <Link href="https://github.com/blrchen/chatgpt-lite" aria-label="GitHub Repository">
+              <Link href="https://github.com/YulinChen12/DSL-chatgpt-lite#" aria-label="GitHub Repository">
                 <FaGithub />
               </Link>
             }
